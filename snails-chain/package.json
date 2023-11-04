@@ -1,0 +1,17 @@
+{
+  "name": "snails",
+  "version": "1.0.0",
+  "description": "snails-mini-chain",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cli-table": "^0.3.11",
+    "crypto": "^1.0.1",
+    "vorpal": "^1.12.0"
+  }
+}
