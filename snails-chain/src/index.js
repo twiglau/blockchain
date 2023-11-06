@@ -3,9 +3,11 @@ const vorpal = require("vorpal")();
 const Table = require("cli-table");
 const SnailsChain = require("./blockchain");
 const blockChain = new SnailsChain();
+const rsa = require('./rsa')
 
 // cli-table 格式化输出
 function formatLog(data) {
+  if(!data || data.length === 0) return;
   if (!(data instanceof Array)) {
     data = [data];
   }
@@ -22,8 +24,8 @@ function formatLog(data) {
   console.log(table.toString());
 }
 // 命令 mine
-vorpal.command("mine <address>", "挖矿").action(function (args, callback) {
-  const newBlock = blockChain.mine(args.address);
+vorpal.command("mine", "挖矿").action(function (args, callback) {
+  const newBlock = blockChain.mine(rsa.KEYS.pub);
   if (newBlock) {
     formatLog(newBlock);
   }
@@ -47,19 +49,39 @@ vorpal
     callback();
   });
 // 命令 chain
-vorpal.command("chain", "查看区块链").action(function (args, callback) {
+vorpal.command("blockchain", "查看区块链").action(function (args, callback) {
   formatLog(blockChain.blockchain);
   callback();
 });
 // 命令 trans
 vorpal
-  .command("trans <from> <to> <amount>", "转账")
+  .command("trans <to> <amount>", "转账")
   .action(function (args, callback) {
-    const { from, to, amount } = args;
-    const trans = blockChain.transfer(from, to, amount);
+    // 本地公钥当做转出地址
+    const {to, amount } = args;
+    const trans = blockChain.transfer(rsa.KEYS.pub, to, amount);
     formatLog(trans);
     callback();
   });
+// 命令 pub
+vorpal.command("pub", "查看本地地址").action(function (args, callback) {
+  console.log('地址:', rsa.KEYS.pub);
+  callback();
+});
+// 命令 peers
+vorpal.command('peers', '查看网络节点列表').action(function(args, callback) {
+  formatLog(blockChain.peers);
+  callback()
+})
+// 命令 chat
+vorpal.command('chat <msg>', '跟别的节点Hi一下').action(function(args, callback) {
+  blockChain.boardCast({
+    type: 'Hi',
+    data: args.msg
+  })
+  callback()
+})
+
 console.log("welcome to snails chain");
 vorpal.exec("help");
 vorpal.delimiter("snails chain =>").show();
