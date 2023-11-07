@@ -8,6 +8,7 @@
 - VSCode 插件: `solidity`
 - 合约编辑器: `remix`[https://remix.ethereum.org/]
 - 本地工具: `Ganache` 模拟本地网络
+- truffle: 合约开发套件[]
 
 ## 基本数据类型
 
