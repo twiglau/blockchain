@@ -3,6 +3,12 @@
 - 区块链上的代码
 - 语言是类 JavaScript 的 solidity
 
+## 工具/插件
+
+- VSCode 插件: `solidity`
+- 合约编辑器: `remix`[https://remix.ethereum.org/]
+- 本地工具: `Ganache` 模拟本地网络
+
 ## 基本数据类型
 
 1. 布尔值
