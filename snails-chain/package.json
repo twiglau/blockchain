@@ -4,6 +4,7 @@
   "description": "snails-mini-chain",
   "main": "index.js",
   "scripts": {
+    "lint": "eslint --fix --ext .js src",
     "start": "npm run dev",
     "dev": "node src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -14,6 +15,7 @@
     "cli-table": "^0.3.11",
     "crypto": "^1.0.1",
     "elliptic": "^6.5.4",
+    "eslint": "^8.53.0",
     "vorpal": "^1.12.0"
   }
 }

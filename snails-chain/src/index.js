@@ -81,6 +81,11 @@ vorpal.command('chat <msg>', '跟别的节点Hi一下').action(function(args, ca
   })
   callback()
 })
+// 命令 pending
+vorpal.command('pending', '查看还没有被打包的交易').action(function(args, callback) {
+  formatLog(blockChain.data)
+  callback()
+})
 
 console.log("welcome to snails chain");
 vorpal.exec("help");

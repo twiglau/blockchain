@@ -113,7 +113,7 @@ class Blockchain {
             type: "block-chain",
             data: JSON.stringify({
               blockchain: this.blockchain,
-              // trans: this.data
+              trans: this.data
             }),
           },
           port,
@@ -122,22 +122,29 @@ class Blockchain {
         this.peers.push(remote);
         console.log("你好啊, 新朋友,请你喝茶", remote);
         break;
-      case "block-chain":
+      case "block-chain":{
         // 同步本地链
         let allData = JSON.parse(action.data);
         let newChain = allData.blockchain;
+        let newTrans = allData.trans
         this.replaceChain(newChain);
+        this.replaceTrans(newTrans)
+      }
+        
         break;
       case "remote-address":
         // 存储远程信息,退出的时候用到
         this.remote = action.data;
         break;
-      case "peer-list":
+      case "peer-list":{
+
         // 远程告诉,现在的节点列表
         const newPeers = action.data;
         this.addPeers(newPeers);
+      }
         break;
-      case "say-hi":
+      case "say-hi":{
+
         let remotePeer = action.data;
         this.peers.push(remotePeer);
         console.log("[信息] 新朋友你好, 相识就是缘!");
@@ -146,11 +153,13 @@ class Blockchain {
           remotePeer.port,
           remotePeer.address
         );
+      }
         break;
       case "Hi":
         console.log(`${remote.address}:${remote.port}: ${action.data}`);
         break;
-      case "trans":
+      case "trans":{
+
         // 网络上收到的交易请求
         // 是不是有重复交易
         let getP = this.data.find((v) => this.isEqualObj(v, action.data));
@@ -159,8 +168,10 @@ class Blockchain {
           this.addTrans(action.data);
           this.boardCast({ type: "trans", data: action.data });
         }
+      }
         break;
-      case "mine":
+      case "mine":{
+
         // 网络上有人挖矿成功
         const lastBlock = this.getLastBlock();
         if (lastBlock.hash === action.data.hash) return; // 重复的消息
@@ -177,6 +188,7 @@ class Blockchain {
         } else {
           console.log("[错误] 挖矿区块不合法");
         }
+      }
         break;
       default:
         console.log("传入到default里面了");
@@ -256,15 +268,7 @@ class Blockchain {
     });
     return balance;
   }
-  isValidTransfer(trans) {
-    // 是不是合法的转账
-    return rsa.verify(trans, trans.from);
-  }
-  addTrans(trans) {
-    if (this.isValidTransfer(trans)) {
-      this.data.push(trans);
-    }
-  }
+  
   //挖矿
   mine(address) {
     // 校验所欲交易合法性
@@ -351,7 +355,7 @@ class Blockchain {
     return true;
   }
   //校验区块链
-  isValidChain(chain = this.blockchain, prevBlock = this.getLastBlock()) {
+  isValidChain(chain = this.blockchain) {
     // 校验区块,除了创世区块
     for (let i = chain.length - 1; i >= 1; i = i - 1) {
       if (!this.isValidBlock(chain[i], chain[i - 1])) {
@@ -375,6 +379,21 @@ class Blockchain {
       this.blockchain = JSON.parse(JSON.stringify(newChain));
     } else {
       console.log("[错误]: 不合法链");
+    }
+  }
+  replaceTrans(trans){
+    const isPass = trans.every(v => this.isValidTransfer(v))
+    if(isPass) {
+      this.data = trans
+    }
+  }
+  isValidTransfer(trans) {
+    // 是不是合法的转账
+    return rsa.verify(trans, trans.from);
+  }
+  addTrans(trans) {
+    if (this.isValidTransfer(trans)) {
+      this.data.push(trans);
     }
   }
 }
