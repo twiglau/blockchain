@@ -10,6 +10,9 @@
 - 本地工具: `Ganache` 模拟本地网络
 - truffle: 合约开发套件[]
 
+1. 全局安装 `npm install -g truffle`
+2. 查看示例项目 `truffle unbox pet-shop`
+
 ## 基本数据类型
 
 1. 布尔值
