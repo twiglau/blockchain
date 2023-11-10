@@ -3,7 +3,7 @@
 // 3. 添加 ant.design UI库支持
 // 4. 完成项目
 import Web3 from "web3";
-// import TruffleContract from "@truffle/contract";
+import TruffleContract from "@truffle/contract";
 // import AdoptionJson from "@/truffle/build/contracts/Adoption.json";
 function App() {
   return (
