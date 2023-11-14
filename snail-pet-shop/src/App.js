@@ -2,37 +2,44 @@
 // 2. 执行一下合约内部函数
 // 3. 添加 ant.design UI库支持
 // 4. 完成项目
-import { useEffect, useReducer } from "react";
+import { useEffect } from "react";
 import Web3 from "web3";
 import TruffleContract from "@truffle/contract";
 import AdoptionJson from "@/truffle/build/contracts/Adoption.json";
-const PROVIDER = "web3/provider";
-const WEB3 = "web3/name";
-const ADOPTION = "web3/adoption";
+
+import Counter from "./test-redux/counter";
+import Movie from "./test-redux/movie";
 
 function App() {
-  const [state, dispatch] = useReducer(reducer, initialState);
   useEffect(() => {
-    const { adoption: truffleAdoption, web3Provider } = state;
+    async function start() {
+      // const webInfo = await initialFunc();
+      // window.WEBS = webInfo;
+      // await markAdopted();
+    }
+    start();
+  }, []);
+  // 获取基本信息
+  const initialFunc = async () => {
+    let web3Provider;
     if (typeof window.web3 !== "undefined") {
-      dispatch({ type: PROVIDER, web3Provider: window.web3.currentProvider });
+      web3Provider = window.web3.currentProvider;
     } else {
       alert("请安装metaMask");
     }
     const web3 = new Web3(web3Provider);
-    dispatch({ type: WEB3, web3 });
     // 初始化合约
     const adoption = TruffleContract(AdoptionJson);
-    dispatch({ type: ADOPTION, adoption });
-    console.log("web3: ", web3, adoption);
-    truffleAdoption && truffleAdoption.setProvider(web3Provider);
-
-    truffleAdoption && markAdopted();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
+    adoption.setProvider(web3Provider);
+    return {
+      web3,
+      web3Provider,
+      adoption,
+    };
+  };
+  // 测试是否拿到信息
   const markAdopted = async () => {
-    const { adoption } = state;
+    const { adoption } = window.WEBS;
     // 部署链接下
 
     const adoptionInstance = await adoption.deployed();
@@ -40,24 +47,12 @@ function App() {
     console.log("adopters: ", adopters);
     return adopters;
   };
-  return <div className="App"></div>;
+  return (
+    <div className="App">
+      <Counter />
+      <Movie />
+    </div>
+  );
 }
 
 export default App;
-
-const initialState = {
-  web3: null,
-  web3Provider: null,
-};
-function reducer(state, action) {
-  switch (action.type) {
-    case WEB3:
-      return { ...state, web3: action.web3 };
-    case PROVIDER:
-      return { ...state, web3Provider: action.web3Provider };
-    case ADOPTION:
-      return { ...state, adoption: action.adoption };
-    default:
-      break;
-  }
-}
