@@ -13,9 +13,10 @@ import Movie from "./test-redux/movie";
 function App() {
   useEffect(() => {
     async function start() {
-      // const webInfo = await initialFunc();
-      // window.WEBS = webInfo;
-      // await markAdopted();
+      const webInfo = await initialFunc();
+      window.WEBS = webInfo;
+      await markAdopted();
+      await markAdopted2();
     }
     start();
   }, []);
@@ -29,12 +30,17 @@ function App() {
     }
     const web3 = new Web3(web3Provider);
     // 初始化合约
+    // 1. 方式一:
     const adoption = TruffleContract(AdoptionJson);
     adoption.setProvider(web3Provider);
+    // 2. 方式二:
+    const networkId = await web3.eth.net.getId();
+    const AdoptionContract = await new web3.eth.Contract(AdoptionJson.abi, AdoptionJson.networks[networkId].address)
     return {
       web3,
       web3Provider,
       adoption,
+      AdoptionContract
     };
   };
   // 测试是否拿到信息
@@ -47,8 +53,23 @@ function App() {
     console.log("adopters: ", adopters);
     return adopters;
   };
+  const markAdopted2 = async () => {
+    const { AdoptionContract } = window.WEBS
+    const adopters = await AdoptionContract.methods.getAdopters().call();
+    console.log('adopters2: ', adopters)
+    return adopters;
+  }
+  const doAdopt = async (petId) => {
+    const { adoption, web3 } = window.WEBS;
+    const accounts = await web3.eth.requestAccounts()
+    const account = accounts[0]
+    const adoptionInstance = await adoption.deployed()
+    await adoptionInstance.adopt(petId, {from: account })
+    markAdopted()
+  }
   return (
     <div className="App">
+      <button onClick={e => doAdopt(1)}>领养第二个</button>
       <Counter />
       <Movie />
     </div>

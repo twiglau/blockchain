@@ -10,7 +10,7 @@ const Movice = memo(() => {
   return (
     <div>
       <h2>电影总条数: {totals}</h2>
-      {list.map((ele) => (
+      {list && list.map((ele) => (
         <p key={ele.tvId}>{ele.name}</p>
       ))}
     </div>

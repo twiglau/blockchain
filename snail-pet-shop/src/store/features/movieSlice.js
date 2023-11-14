@@ -33,8 +33,8 @@ export const movieSlice = createSlice({
   reducers: {
     // 数据请求完成触发
     loadDataEnd: (state, { type, payload }) => {
-      state.list = payload;
-      state.totals = payload.length;
+      state.list = payload.list;
+      state.totals = payload.totals;
     },
   },
   // 1. 方法一: 由 extraReducers 控制处理 异步 action
