@@ -35,12 +35,15 @@ function App() {
     adoption.setProvider(web3Provider);
     // 2. 方式二:
     const networkId = await web3.eth.net.getId();
-    const AdoptionContract = await new web3.eth.Contract(AdoptionJson.abi, AdoptionJson.networks[networkId].address)
+    const AdoptionContract = await new web3.eth.Contract(
+      AdoptionJson.abi,
+      AdoptionJson.networks[networkId].address
+    );
     return {
       web3,
       web3Provider,
       adoption,
-      AdoptionContract
+      AdoptionContract,
     };
   };
   // 测试是否拿到信息
@@ -54,22 +57,31 @@ function App() {
     return adopters;
   };
   const markAdopted2 = async () => {
-    const { AdoptionContract } = window.WEBS
+    const { AdoptionContract } = window.WEBS;
     const adopters = await AdoptionContract.methods.getAdopters().call();
-    console.log('adopters2: ', adopters)
+    console.log("adopters2: ", adopters);
     return adopters;
-  }
+  };
   const doAdopt = async (petId) => {
     const { adoption, web3 } = window.WEBS;
-    const accounts = await web3.eth.requestAccounts()
-    const account = accounts[0]
-    const adoptionInstance = await adoption.deployed()
-    await adoptionInstance.adopt(petId, {from: account })
-    markAdopted()
-  }
+    const accounts = await web3.eth.requestAccounts();
+    const account = accounts[0];
+    const adoptionInstance = await adoption.deployed();
+    await adoptionInstance.adopt(petId, { from: account });
+    markAdopted();
+  };
+  const doAdopt2 = async (petId) => {
+    const { AdoptionContract, web3 } = window.WEBS;
+    const accounts = await web3.eth.requestAccounts();
+    const account = accounts[0];
+    // TODO: 如何调用
+    await AdoptionContract.methods.adopt(petId).call();
+    markAdopted2();
+  };
   return (
     <div className="App">
-      <button onClick={e => doAdopt(1)}>领养第二个</button>
+      <button onClick={(e) => doAdopt(1)}>领养第二个</button>
+      <button onClick={(e) => doAdopt2(3)}>领养第三个</button>
       <Counter />
       <Movie />
     </div>

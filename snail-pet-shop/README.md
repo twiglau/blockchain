@@ -26,7 +26,7 @@ module.exports = function (deployer) {
 1. 使用 Web 端来展现
 2. 依赖的库: `web3` `truffle-contract`
 
-# 配置项目
+## 配置项目
 
 1. `webpack5`安装 node 的核心模块后无法安装后直接使用，需要自己手动配置否则会报错(如果没有遇到则忽略)，安装`npm i node-polyfill-webpack-plugin -D`后在 craco 中追加配置实现自动化
 
@@ -44,4 +44,11 @@ webpack: {
       ],
     },
 }
+```
+
+## 单位转换
+
+```js
+// 转换为 十进制
+const val = web3.utils.fromWei(unit, "ether");
 ```
