@@ -6,9 +6,16 @@ import { useEffect } from "react";
 import Web3 from "web3";
 import TruffleContract from "@truffle/contract";
 import AdoptionJson from "@/truffle/build/contracts/Adoption.json";
+import pets from "@/truffle/src/pets.json";
 
 import Counter from "./test-redux/counter";
 import Movie from "./test-redux/movie";
+
+import { Layout, Space, Button, Col, Row, Card, Avatar } from "antd";
+import "./App.css";
+
+const { Header, Footer, Content } = Layout;
+const { Meta } = Card;
 
 function App() {
   useEffect(() => {
@@ -72,20 +79,68 @@ function App() {
   };
   const doAdopt2 = async (petId) => {
     const { AdoptionContract, web3 } = window.WEBS;
-    const accounts = await web3.eth.requestAccounts();
-    const account = accounts[0];
-    // TODO: 如何调用
-    await AdoptionContract.methods.adopt(petId).call();
-    markAdopted2();
+    try {
+      const accounts = await web3.eth.requestAccounts();
+      const account = accounts[0];
+      // TODO: 如何调用
+      const res = await AdoptionContract.methods.adopt(petId, account).call();
+      console.log("res: ", res);
+      markAdopted2();
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
-    <div className="App">
-      <button onClick={(e) => doAdopt(1)}>领养第二个</button>
-      <button onClick={(e) => doAdopt2(3)}>领养第三个</button>
-      <Counter />
-      <Movie />
-    </div>
+    <Space
+      direction="vertical"
+      style={{
+        width: "100%",
+      }}
+      size={[0, 0]}
+    >
+      <Layout>
+        <Header style={headerStyle}>Welcome, Snail Pet Shop!</Header>
+        <Content style={contentStyle}>
+          <Row gutter={[16, 24]}>
+            {pets.map((pet) => {
+              return (
+                <Col span="6" key={pet.id}>
+                  <Card
+                    hoverable
+                    cover={<img alt={pet.Frieda} src={pet.picture} />}
+                    actions={[<Button>领养</Button>]}
+                  >
+                    <Meta
+                      avatar={<Avatar src={pet.picture} />}
+                      title={pet.name}
+                      description={pet.location}
+                    />
+                  </Card>
+                </Col>
+              );
+            })}
+          </Row>
+        </Content>
+        <Footer style={footerStyle}>Footer</Footer>
+      </Layout>
+    </Space>
   );
 }
-
+const headerStyle = {
+  textAlign: "center",
+  color: "#fff",
+  height: 64,
+  paddingInline: 50,
+  lineHeight: "64px",
+  backgroundColor: "#7dbcea",
+};
+const contentStyle = {
+  minHeight: 120,
+  color: "#fff",
+};
+const footerStyle = {
+  textAlign: "center",
+  color: "#fff",
+  backgroundColor: "#7dbcea",
+};
 export default App;
