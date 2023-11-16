@@ -2,7 +2,7 @@
 // 2. 执行一下合约内部函数
 // 3. 添加 ant.design UI库支持
 // 4. 完成项目
-import { useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Web3 from "web3";
 import TruffleContract from "@truffle/contract";
 import AdoptionJson from "@/truffle/build/contracts/Adoption.json";
@@ -16,8 +16,9 @@ import "./App.css";
 
 const { Header, Footer, Content } = Layout;
 const { Meta } = Card;
-
+const InitAddress = '0x' + '0'.repeat(40)
 function App() {
+  const [adopters, setAdopters] = useState([])
   useEffect(() => {
     async function start() {
       const webInfo = await initialFunc();
@@ -60,13 +61,14 @@ function App() {
 
     const adoptionInstance = await adoption.deployed();
     const adopters = await adoptionInstance.getAdopters.call();
+    setAdopters(adopters)
     console.log("adopters: ", adopters);
     return adopters;
   };
   const markAdopted2 = async () => {
     const { AdoptionContract } = window.WEBS;
     const adopters = await AdoptionContract.methods.getAdopters().call();
-    console.log("adopters2: ", adopters);
+    setAdopters(adopters)
     return adopters;
   };
   const doAdopt = async (petId) => {
@@ -90,6 +92,9 @@ function App() {
       console.log(error);
     }
   };
+  const isBtnDisabled = (index) => {
+     return adopters[index] !== InitAddress
+  };
   return (
     <Space
       direction="vertical"
@@ -108,7 +113,7 @@ function App() {
                   <Card
                     hoverable
                     cover={<img alt={pet.Frieda} src={pet.picture} />}
-                    actions={[<Button>领养</Button>]}
+                    actions={[<Button type="primary" onClick={e => doAdopt(pet.id)} disabled={isBtnDisabled(pet.id)}>领养</Button>]}
                   >
                     <Meta
                       avatar={<Avatar src={pet.picture} />}
