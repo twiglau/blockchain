@@ -9,13 +9,13 @@ contract CourseList {
         ceo = msg.sender;
     }
 
-    function createCourse(string _name) public {
+    function createCourse(string memory _name) public {
         address newCourse = new Course(_name);
         courses.push(newCourse);
     }
 
     // 获取课程所有地址
-    function getCourse() public view return $(address[]) {
+    function getCourse() public view returns (address[] memory) {
         return courses;
     }
 }
@@ -23,5 +23,5 @@ contract CourseList {
 contract Course {
     string public name;
 
-    constructor(string _name) public {}
+    constructor(string memory _name) public {}
 }

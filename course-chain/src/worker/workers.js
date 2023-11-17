@@ -32,11 +32,13 @@ const Test = () => {
     const result = await compileWithWorker({
       content: "",
     });
+    console.log(result);
   };
   return (
     <div>
       <h2>Test - work Loader</h2>
       <button onClick={createWorker}>createWorker</button>
+      <button onClick={(e) => handleCompile()}>handleCompile</button>
     </div>
   );
 };
