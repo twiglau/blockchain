@@ -5,17 +5,17 @@
   "dependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@craco/craco": "^7.1.0",
-    "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "@truffle/contract": "^4.6.31",
+    "ganache": "^7.9.1",
     "node-polyfill-webpack-plugin": "^2.0.1",
     "onchange": "^7.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
     "rimraf": "^5.0.5",
-    "solc": "^0.4.24",
+    "solc": "^0.8.23-fixed",
     "web-vitals": "^2.1.4",
     "web3": "^4.2.2",
     "worker-plugin": "^5.0.1"
@@ -47,5 +47,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.1.4",
+    "jest-environment-jsdom": "^27.4.3"
   }
 }

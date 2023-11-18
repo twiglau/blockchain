@@ -5,12 +5,14 @@ contract CourseList {
     address public ceo;
     address[] public courses;
 
-    constructor() public {
+    constructor() {
         ceo = msg.sender;
     }
 
     function createCourse(string memory _name) public {
-        address newCourse = new Course(_name);
+        // 这里语义不明确
+        // TODO: 是否有问题
+        address newCourse = address(new Course(_name));
         courses.push(newCourse);
     }
 
@@ -23,5 +25,7 @@ contract CourseList {
 contract Course {
     string public name;
 
-    constructor(string memory _name) public {}
+    constructor(string memory _name) {
+        name = _name;
+    }
 }

@@ -76,3 +76,16 @@ self.addEventListener("message", (e) => {
     {name: 'Vue':content:'xxxx'}
 ]
 ```
+
+## 测试驱动开发
+
+Jest 是一个 JavaScript 的单元测试框架，它使用 jsdom 来模拟浏览器环境。在使用 Jest 进行单元测试时，如果遇到"ReferenceError: TextEncoder is not defined"错误，这通常是因为 jsdom 不支持 TextEncoder 对象。
+
+TextEncoder 是一个 Web API，它可以将字符串编码为二进制数据。但是，由于 jsdom 没有实现 TextEncoder，所以在使用 Jest 进行单元测试时会出现这个错误。
+
+解决方案：
+
+使用其他编码库，例如 TextEncoderLite，它是一个纯 JavaScript 实现的 TextEncoder。
+使用 Jest 的 transform 选项来配置 babel 来模拟 TextEncoder。
+使用 node.js 中的 Buffer 对象来替代 TextEncoder。
+如果在您的代码中使用了 TextEncoder，并且您正在使用 Jest 进行单元测试，则可能需要采取以上措施之一来解决这个问题。
