@@ -3,16 +3,17 @@
  */
 const path = require("path");
 const assert = require("assert");
-const Web3 = require("web3");
+const { Web3 } = require("web3");
 const ganache = require("ganache");
 
-const web3 = new Web3(ganache.provider());
+const provider = ganache.provider();
+const web3 = new Web3(provider);
 // 引入合约的json
 const CourseList = require(path.resolve(
   __dirname,
-  "../compile/CourseList.json"
+  "../src/compile/CourseList.json"
 ));
-const Course = require(path.resolve(__dirname, "../compile/Course.json"));
+const Course = require(path.resolve(__dirname, "../src/compile/Course.json"));
 
 // 定义几个全局变量, 所有测试需要
 let accounts;
@@ -25,6 +26,7 @@ describe("测试课程=>", () => {
     accounts = await web3.eth.getAccounts();
     console.log(accounts);
   });
+
   it("1 + 2 = 2", () => {
     assert.equal(1 + 2, 3);
   });

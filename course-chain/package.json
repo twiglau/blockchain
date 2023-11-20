@@ -9,6 +9,7 @@
     "@testing-library/user-event": "^13.5.0",
     "@truffle/contract": "^4.6.31",
     "ganache": "^7.9.1",
+    "mocha": "^10.2.0",
     "node-polyfill-webpack-plugin": "^2.0.1",
     "onchange": "^7.1.0",
     "react": "^18.2.0",
@@ -28,7 +29,11 @@
     "precompile": "rimraf src/compiled/*",
     "compile": "node scripts/compile",
     "precompile:w": "npm run compile",
-    "compile:w": "onchange 'contracts/*.sol' -- npm run compile"
+    "compile:w": "onchange 'contracts/*.sol' -- npm run compile",
+    "test:w": "mocha --watch",
+    "rebuild": "npm run compile && mocha",
+    "prerebuild:w": "npm run rebuild",
+    "rebuild:w": "onchange contracts/*.sol test/*.js -- npm run rebuild"
   },
   "eslintConfig": {
     "extends": [
@@ -49,7 +54,6 @@
     ]
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "^6.1.4",
-    "jest-environment-jsdom": "^27.4.3"
+    "@testing-library/jest-dom": "^6.1.4"
   }
 }
